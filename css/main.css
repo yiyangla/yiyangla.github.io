@@ -1175,7 +1175,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #6293ff;
+  background: #b026da;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -2306,12 +2306,22 @@ embed {
 }
 #添加背景图片,
 body {
-  background-image: url("/images/background.jpg");
-  background-attachment: fixed;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center center; /* 确保图片居中显示 */
-/* 可选：设置最小高度确保内容少时也能显示完整背景 */
+  position: relative;
   min-height: 100vh;
   margin: 0;
+}
+body::before {
+  content: "";
+  background-image: url("/images/background.jpg");
+  background-attachment: local; /* 关键修改：改为local或scroll */
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  opacity: 0.5;
+  position: fixed; /* 改为fixed确保全覆盖 */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
 }

